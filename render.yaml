@@ -1,0 +1,17 @@
+# Render Blueprint: deploys the game as a free static site on Render's CDN.
+# The build just copies index.html into dist/, so only the game is published
+# (README.md and this file stay private to the repo).
+services:
+  - type: web
+    name: bubble-shooter
+    runtime: static
+    buildCommand: mkdir -p dist && cp index.html dist/
+    staticPublishPath: ./dist
+    headers:
+      # Always check for a new version, so updates show up right after a deploy.
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
